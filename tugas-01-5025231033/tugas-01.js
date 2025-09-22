@@ -1,6 +1,3 @@
-// tinggal interaktifin the shi man
-// sama warna plank a c dihytamkan kali ya
-
 "use strict";
 
 var canvas;
