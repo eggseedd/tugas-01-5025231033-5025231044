@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Tugas 1 Grafkom - Raditya Yusuf dan Rahman Azkarafi</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 28px;
+    }
+    
+    .canvas-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 25px;
+    }
+    
+    #gl-canvas {
+        border: 2px solid #34495e;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background-color: #fff;
+    }
+    
+    .controls-container {
+        max-width: 840px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .control-group {
+        margin-bottom: 25px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        background-color: #fafafa;
+    }
+    
+    .control-group h3 {
+        margin-top: 0;
+        color: #2c3e50;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 10px;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+    
+    .control-row {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+    }
+    
+    .control-label {
+        width: 100px;
+        font-weight: 500;
+        font-size: 16px;
+    }
+    
+    .slider-container {
+        flex: 1;
+        margin: 0 15px;
+    }
+    
+    input[type="range"] {
+        width: 100%;
+        height: 8px;
+        border-radius: 4px;
+        background: #dcdcdc;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3498db;
+        cursor: pointer;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3498db;
+        cursor: pointer;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .value-display {
+        width: 60px;
+        text-align: center;
+        font-weight: bold;
+        color: #2c3e50;
+        font-size: 16px;
+        background: #ecf0f1;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+    
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+    
+    button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        background-color: #3498db;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 120px;
+    }
+    
+    button:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    #reset {
+        background-color: #e74c3c;
+    }
+    
+    #reset:hover {
+        background-color: #c0392b;
+    }
+    
+    #autoRotate {
+        background-color: #2ecc71;
+    }
+    
+    #autoRotate:hover {
+        background-color: #27ae60;
+    }
+    
+    .auto-rotate-hint {
+        text-align: center;
+        margin-top: 15px;
+        font-style: italic;
+        color: #7f8c8d;
+        font-size: 14px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+    
+    .scale-range {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 13px;
+        color: #7f8c8d;
+        padding: 0 5px;
+    }
+    
+    @media (max-width: 900px) {
+        .controls-container {
+            padding: 15px;
+        }
+        
+        .control-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .control-label {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        
+        .slider-container {
+            width: 100%;
+            margin: 8px 0;
+        }
+        
+        .value-display {
+            align-self: flex-end;
+            margin-top: 8px;
+        }
+        
+        .button-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        button {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <h1>Tugas 1 Grafkom - Raditya Yusuf dan Rahman Azkarafi </h1>
+    
+    <div class="canvas-container">
+        <canvas id="gl-canvas" width="840" height="840">
+            Browser Anda tidak mendukung elemen canvas HTML5.
+        </canvas>
+    </div>
+    
+    <div class="controls-container">
+        <!-- Kontrol Rotasi -->
+        <div class="control-group">
+            <h3>Kontrol Rotasi</h3>
+            
+            <div class="control-row">
+                <span class="control-label">Rotasi X:</span>
+                <div class="slider-container">
+                    <input type="range" id="rotateX" min="-180" max="180" value="0">
+                </div>
+                <span class="value-display" id="rotateXValue">0°</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Rotasi Y:</span>
+                <div class="slider-container">
+                    <input type="range" id="rotateY" min="-180" max="180" value="0">
+                </div>
+                <span class="value-display" id="rotateYValue">0°</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Rotasi Z:</span>
+                <div class="slider-container">
+                    <input type="range" id="rotateZ" min="-180" max="180" value="0">
+                </div>
+                <span class="value-display" id="rotateZValue">0°</span>
+            </div>
+        </div>
+        
+        <!-- Kontrol Posisi -->
+        <div class="control-group">
+            <h3>Kontrol Posisi</h3>
+            
+            <div class="control-row">
+                <span class="control-label">Posisi X:</span>
+                <div class="slider-container">
+                    <input type="range" id="posX" min="-2" max="2" step="0.1" value="0">
+                </div>
+                <span class="value-display" id="posXValue">0.0</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Posisi Y:</span>
+                <div class="slider-container">
+                    <input type="range" id="posY" min="-2" max="2" step="0.1" value="0">
+                </div>
+                <span class="value-display" id="posYValue">0.0</span>
+            </div>
+        </div>
+        
+        <!-- Kontrol Ukuran -->
+        <div class="control-group">
+            <h3>Kontrol Ukuran</h3>
+            
+            <div class="control-row">
+                <span class="control-label">Ukuran:</span>
+                <div class="slider-container">
+                    <input id="scale-slider" type="range" min="0.1" max="2.0" step="0.1" value="0.4">
+                </div>
+                <span class="value-display" id="scaleValue">0.4x</span>
+            </div>
+            
+            <div class="scale-range">
+                <span>0.1x</span>
+                <span>2.0x</span>
+            </div>
+        </div>
+        
+        <!-- Tombol Aksi -->
+        <div class="button-container">
+            <button id="smaller">Perkecil</button>
+            <button id="larger">Perbesar</button>
+            <button id="reset">Reset</button>
+            <button id="autoRotate">Rotasi Otomatis</button>
+        </div>
+        
+        <div class="auto-rotate-hint">
+            Dobel klik canvas untuk rotasi otomatis
+        </div>
+    </div>
+    <!-- <button id="ChangeColor">Change Object to Green
+    </button>
+    <button id="ChangeColorRed">Change Object to Red
+    </button> -->
+    <!-- <div style="display: grid; justify-content: flex-start; gap: 5px; grid-template-columns: repeat(2, auto);">
+        <button id="rotate-left">Rotate Left
+        </button>
+        <button id="rotate-right">Rotate Right
+        </button>
+        <button id="rotate-up">Rotate Up
+        </button>
+        <button id="rotate-down">Rotate Down
+        </button>
+        <button id="rotate-left">Move to Left
+        </button>
+        <button id="rotate-right">Move to Right
+        </button>
+        <button id="clear" style="background-color: red;">Clear Effects
+        </button>
+    </div> -->
+<!-- <select id="mymenu" size="7">
+    <option value="0">Point</option>
+    <option value="1">Line</option>
+    <option value="2">Line Loop</option>
+    <option value="3">Line Strip</option>
+    <option value="4">Triangle</option>
+    <option value="5">Triangle Strip</option>
+    <option value="6">Triangle Fan</option>
+</select> -->
+
+<!-- <div>
+    Size (default: 1) 0.5x<input id="size_slide" type="range"
+       min="0.5" max="1.5" step="0.1" value="1" />
+    1.5x 
+</div>
+<div>
+    Red level 0 <input id="red_slide" type="range"
+       min="0" max="1.0" step="0.1" value="0" />
+    1.0 
+</div>
+<div>
+    Green level 0 <input id="green_slide" type="range"
+       min="0" max="1.0" step="0.1" value="0" />
+    1.0 
+</div>
+<div>
+    Blue level 0 <input id="blue_slide" type="range"
+       min="0" max="1.0" step="0.1" value="0" />
+    1.0 
+</div>
+<div>
+    Alpha level 0 <input id="alpha_slide" type="range"
+       min="0" max="1.0" step="0.1" value="1" />
+    1.0 
+</div>
+     -->
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in  vec4 aPosition;
+uniform vec4 thetaColor;
+out vec4 vColor;
+
+uniform vec3 uTheta;
+uniform float uScale;
+uniform vec3 uPosition;
+
+void main()
+{
+    // Compute the sines and cosines of theta for each of
+    //   the three axes in one computation.
+    vec3 angles = radians( uTheta );
+    vec3 c = cos( angles );
+    vec3 s = sin( angles );
+
+    // Remeber: thse matrices are column-major
+    mat4 rx = mat4( 1.0,  0.0,  0.0, 0.0,
+		    0.0,  c.x,  s.x, 0.0,
+		    0.0, -s.x,  c.x, 0.0,
+		    0.0,  0.0,  0.0, 1.0 );
+
+    mat4 ry = mat4( c.y, 0.0, -s.y, 0.0,
+		    0.0, 1.0,  0.0, 0.0,
+		    s.y, 0.0,  c.y, 0.0,
+		    0.0, 0.0,  0.0, 1.0 );
+    
+    mat4 rz = mat4( c.z,  s.z, 0.0, 0.0,
+		   -s.z,  c.z, 0.0, 0.0,
+		    0.0,  0.0, 1.0, 0.0,
+		    0.0,  0.0, 0.0, 1.0 );
+
+    mat4 scale = mat4( uScale, 0.0,    0.0,    0.0,
+                       0.0,    uScale, 0.0,    0.0,
+                       0.0,    0.0,    uScale, 0.0,
+                       0.0,    0.0,    0.0,    1.0 );
+
+    mat4 translation = mat4( 1.0, 0.0, 0.0, 0.0,
+                             0.0, 1.0, 0.0, 0.0,
+                             0.0, 0.0, 1.0, 0.0,
+                             uPosition.x, uPosition.y, uPosition.z, 1.0 );
+
+    vColor = thetaColor;
+    
+    // Gunakan semua matriks rotasi dan tambahkan translasi
+    gl_Position = translation * rz * ry * rx * scale * aPosition;
+    gl_Position.z = -gl_Position.z;  // Untuk sistem koordinat tangan kanan
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+    #version 300 es
+    precision mediump float;
+    
+    out vec4 fColor;
+    in vec4 vColor;
+    
+    void
+    main()
+    {
+        fColor = vColor;
+    }
+    </script>
+    
+
+
+<script src="initShaders.js"></script>
+<script src="MVnew.js"></script>
+<script src="tugas-01.js"></script>
+
+</body>
+</html>
