@@ -139,120 +139,6 @@ var vertices = [
     vec3( 0.8, -0.27, -0.425),  
     vec3( 0.8, -0.3, -0.425), 
 
-// kaki kiri depan
-vec3(1.0, -1.0,  0.425),
-vec3(1.0, -0.3,  0.425),
-vec3(1.1, -0.3,  0.425),
-vec3(1.1, -1.0,  0.425),
-vec3(1.0, -1.0,  0.325),
-vec3(1.0, -0.3,  0.325),
-vec3(1.1, -0.3,  0.325),
-vec3(1.1, -1.0,  0.325),
-
-// kaki kanan depan
-vec3(2.5, -1.0,  0.425),
-vec3(2.5, -0.3,  0.425),
-vec3(2.6, -0.3,  0.425),
-vec3(2.6, -1.0,  0.425),
-vec3(2.5, -1.0,  0.325),
-vec3(2.5, -0.3,  0.325),
-vec3(2.6, -0.3,  0.325),
-vec3(2.6, -1.0,  0.325),
-
-// kaki kiri belakang
-vec3(1.0, -1.0, -0.325),
-vec3(1.0, -0.3, -0.325),
-vec3(1.1, -0.3, -0.325),
-vec3(1.1, -1.0, -0.325),
-vec3(1.0, -1.0, -0.425),
-vec3(1.0, -0.3, -0.425),
-vec3(1.1, -0.3, -0.425),
-vec3(1.1, -1.0, -0.425),
-
-// kaki kanan belakang
-vec3(2.5, -1.0, -0.325),
-vec3(2.5, -0.3, -0.325),
-vec3(2.6, -0.3, -0.325),
-vec3(2.6, -1.0, -0.325),
-vec3(2.5, -1.0, -0.425),
-vec3(2.5, -0.3, -0.425),
-vec3(2.6, -0.3, -0.425),
-vec3(2.6, -1.0, -0.425),
-
-// connector fb-left
-vec3(1.02, -0.45,  0.425),  
-vec3(1.02, -0.30,  0.425),  
-vec3(1.1,  -0.30,  0.425),
-vec3(1.1,  -0.45,  0.425),
-
-vec3(1.02, -0.45, -0.425),
-vec3(1.02, -0.30, -0.425),
-vec3(1.1,  -0.30, -0.425),
-vec3(1.1,  -0.45, -0.425),
-
-// connector fb-right
-vec3(2.5,  -0.45,  0.425),
-vec3(2.5,  -0.30,  0.425),
-vec3(2.58, -0.30,  0.425),
-vec3(2.58, -0.45,  0.425),
-
-vec3(2.5,  -0.45, -0.425),
-vec3(2.5,  -0.30, -0.425),
-vec3(2.58, -0.30, -0.425),
-vec3(2.58, -0.45, -0.425),
-
-// ff connector
-vec3(1.0, -0.45,  0.405),
-vec3(1.0, -0.30,  0.405),
-vec3(2.6, -0.30,  0.405),
-vec3(2.6, -0.45,  0.405),
-
-vec3(1.0, -0.45,  0.325),
-vec3(1.0, -0.30,  0.325),
-vec3(2.6, -0.30,  0.325),
-vec3(2.6, -0.45,  0.325),
-
-// Bb connector
-vec3(1.0, -0.45, -0.325),
-vec3(1.0, -0.30, -0.325),
-vec3(2.6, -0.30, -0.325),
-vec3(2.6, -0.45, -0.325),
-
-vec3(1.0, -0.45, -0.405),
-vec3(1.0, -0.30, -0.405),
-vec3(2.6, -0.30, -0.405),
-vec3(2.6, -0.45, -0.405),
-
-// plank A
-vec3(1.0, -0.3,  0.425),  
-vec3(1.0, -0.27,  0.425),  
-vec3(2.6, -0.27,  0.425),  
-vec3(2.6, -0.3,  0.425),  
-vec3(1.0, -0.3,  0.158),  
-vec3(1.0, -0.27,  0.158),  
-vec3(2.6, -0.27,  0.158),  
-vec3(2.6, -0.3,  0.158),  
-
-// plank B
-vec3(1.0, -0.3,  0.150),  
-vec3(1.0, -0.27,  0.150),  
-vec3(2.6, -0.27,  0.150), 
-vec3(2.6, -0.3,  0.150), 
-vec3(1.0, -0.3, -0.150),  
-vec3(1.0, -0.27, -0.150),  
-vec3(2.6, -0.27, -0.150),  
-vec3(2.6, -0.3, -0.150),  
-
-// plank C
-vec3(1.0, -0.3, -0.158),  
-vec3(1.0, -0.27, -0.158),  
-vec3(2.6, -0.27, -0.158), 
-vec3(2.6, -0.3, -0.158), 
-vec3(1.0, -0.3, -0.425),  
-vec3(1.0, -0.27, -0.425),  
-vec3(2.6, -0.27, -0.425),  
-vec3(2.6, -0.3, -0.425),
-
 // --- Kaki meja ---
 vec3( -0.55, -1.00,  -0.500),
 vec3( -0.55, -0.90,  -0.500),
@@ -282,6 +168,120 @@ vec3( -0.725, -0.15, -1.69),
 vec3( -0.725,  0.00, -1.69),
 vec3( 0.725,  0.00, -1.69),
 vec3( 0.725, -0.15, -1.69),
+
+    // kaki kiri depan
+    vec3(-0.8, -1.0, -1.605),
+    vec3(-0.8, -0.3, -1.605),
+    vec3(-0.7, -0.3, -1.605),
+    vec3(-0.7, -1.0, -1.605),
+    vec3(-0.8, -1.0, -1.705),
+    vec3(-0.8, -0.3, -1.705),
+    vec3(-0.7, -0.3, -1.705),
+    vec3(-0.7, -1.0, -1.705),
+
+    // kaki kanan depan
+    vec3(0.7, -1.0, -1.605),
+    vec3(0.7, -0.3, -1.605),
+    vec3(0.8, -0.3, -1.605),
+    vec3(0.8, -1.0, -1.605),
+    vec3(0.7, -1.0, -1.705),
+    vec3(0.7, -0.3, -1.705),
+    vec3(0.8, -0.3, -1.705),
+    vec3(0.8, -1.0, -1.705),
+
+    // kaki kiri belakang
+    vec3(-0.8, -1.0, -2.355),
+    vec3(-0.8, -0.3, -2.355),
+    vec3(-0.7, -0.3, -2.355),
+    vec3(-0.7, -1.0, -2.355),
+    vec3(-0.8, -1.0, -2.455),
+    vec3(-0.8, -0.3, -2.455),
+    vec3(-0.7, -0.3, -2.455),
+    vec3(-0.7, -1.0, -2.455),
+
+    // kaki kanan belakang
+    vec3(0.7, -1.0, -2.355),
+    vec3(0.7, -0.3, -2.355),
+    vec3(0.8, -0.3, -2.355),
+    vec3(0.8, -1.0, -2.355),
+    vec3(0.7, -1.0, -2.455),
+    vec3(0.7, -0.3, -2.455),
+    vec3(0.8, -0.3, -2.455),
+    vec3(0.8, -1.0, -2.455),
+
+    // connector fb-left
+    vec3(-0.78, -0.45, -1.605),  
+    vec3(-0.78, -0.30, -1.605),  
+    vec3(-0.7, -0.30, -1.605),
+    vec3(-0.7, -0.45, -1.605),
+
+    vec3(-0.78, -0.45, -2.455),
+    vec3(-0.78, -0.30, -2.455),
+    vec3(-0.7, -0.30, -2.455),
+    vec3(-0.7, -0.45, -2.455),
+
+    // connector fb-right
+    vec3(0.7, -0.45, -1.605),
+    vec3(0.7, -0.30, -1.605),
+    vec3(0.78, -0.30, -1.605),
+    vec3(0.78, -0.45, -1.605),
+
+    vec3(0.7, -0.45, -2.455),
+    vec3(0.7, -0.30, -2.455),
+    vec3(0.78, -0.30, -2.455),
+    vec3(0.78, -0.45, -2.455),
+
+    // ff connector
+    vec3(-0.8, -0.45, -1.625),
+    vec3(-0.8, -0.30, -1.625),
+    vec3( 0.8, -0.30, -1.625),
+    vec3( 0.8, -0.45, -1.625),
+
+    vec3(-0.8, -0.45, -1.705),
+    vec3(-0.8, -0.30, -1.705),
+    vec3( 0.8, -0.30, -1.705),
+    vec3( 0.8, -0.45, -1.705),
+
+    // Bb connector
+    vec3(-0.8, -0.45, -2.355),
+    vec3(-0.8, -0.30, -2.355),
+    vec3( 0.8, -0.30, -2.355),
+    vec3( 0.8, -0.45, -2.355),
+
+    vec3(-0.8, -0.45, -2.435),
+    vec3(-0.8, -0.30, -2.435),
+    vec3( 0.8, -0.30, -2.435),
+    vec3( 0.8, -0.45, -2.435),
+
+    // plank A
+    vec3(-0.8, -0.3, -1.605),  
+    vec3(-0.8, -0.27, -1.605),  
+    vec3( 0.8, -0.27, -1.605),  
+    vec3( 0.8, -0.3, -1.605),  
+    vec3(-0.8, -0.3, -1.872),  
+    vec3(-0.8, -0.27, -1.872),  
+    vec3( 0.8, -0.27, -1.872),  
+    vec3( 0.8, -0.3, -1.872),  
+
+    // Plank b
+    vec3(-0.8, -0.3, -1.880),  
+    vec3(-0.8, -0.27, -1.880),  
+    vec3( 0.8, -0.27, -1.880), 
+    vec3( 0.8, -0.3, -1.880), 
+    vec3(-0.8, -0.3, -2.180),  
+    vec3(-0.8, -0.27, -2.180),  
+    vec3( 0.8, -0.27, -2.180),  
+    vec3( 0.8, -0.3, -2.180),  
+
+    // plank C
+    vec3(-0.8, -0.3, -2.188),  
+    vec3(-0.8, -0.27, -2.188),  
+    vec3( 0.8, -0.27, -2.188), 
+    vec3( 0.8, -0.3, -2.188), 
+    vec3(-0.8, -0.3, -2.455),  
+    vec3(-0.8, -0.27, -2.455),  
+    vec3( 0.8, -0.27, -2.455),  
+    vec3( 0.8, -0.3, -2.455),
 ];
 
 
@@ -500,8 +500,26 @@ var indices = [
     197,196,192, 192,193,197,
 ];
 
-
 numElements = indices.length;
+
+var colors = [];
+
+for (let i = 0; i < vertices.length; i++) {
+    if (
+        // plank A (64–71), B (72–79), C (80–87),
+        // dan kursi kedua plank A (184–191), B (192–199), C (200–207)
+        (i >= 64 && i <= 71) ||
+        (i >= 80 && i <= 87) ||
+        (i >= 176 && i <= 183) ||
+        (i >= 192 && i <= 199)
+    ) {
+        // Hitam (0.141, 0.067, 0.051, 1.0)
+        colors.push(0.141, 0.067, 0.051, 1.0);
+    } else {
+        // Coklat kayu (0.396, 0.267, 0.133, 1.0)
+        colors.push(0.396, 0.267, 0.133, 1.0);
+    }
+}
 
 init();
 
@@ -676,13 +694,13 @@ function init()
 
     // // color array atrribute buffer
 
-    // var cBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexColors), gl.STATIC_DRAW);
+    var colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-    // var colorLoc = gl.getAttribLocation(program, "thetaColor");
-    // gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(colorLoc);
+    var aColor = gl.getAttribLocation(program, "aColor");
+    gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(aColor);
 
     // vertex array attribute buffer
     var vBuffer = gl.createBuffer();
@@ -696,7 +714,7 @@ function init()
     // Dapatkan lokasi uniform
     thetaLoc = gl.getUniformLocation(program, "uTheta");
     positionLoc = gl.getUniformLocation(program, "uPosition");
-    thetaColor = gl.getUniformLocation(program, "thetaColor");
+    // thetaColor = gl.getUniformLocation(program, "thetaColor");
     scaleLoc = gl.getUniformLocation(program, "uScale");
     //event listeners for buttons
 
@@ -718,8 +736,8 @@ function render()
     gl.uniform3fv(positionLoc, position);
     gl.uniform1f(scaleLoc, currentScale);
     
-    // Gambar seluruh objek dengan warna kayu
-    gl.uniform4fv(thetaColor, vec4(0.396, 0.267, 0.133, 1.0)); // Warna kayu
+    // // Gambar seluruh objek dengan warna kayu
+    // gl.uniform4fv(thetaColor, vec4(0.396, 0.267, 0.133, 1.0)); // Warna kayu
     gl.drawElements(gl.TRIANGLES, numElements, gl.UNSIGNED_BYTE, 0);
     
     requestAnimationFrame(render);
