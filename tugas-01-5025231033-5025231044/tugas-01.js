@@ -20,6 +20,44 @@ var lastMouseY = 0;
 var autoRotate = true; 
 var scaleLoc,positionLoc;
 var currentScale = 0.8;
+var near = 0.3;
+var thetacam = 0.0;
+var far = 3.0;
+var radius = 4.0;
+var phi = 0.0;
+var dr = 5.0 * Math.PI/180.0;
+
+
+var lightPosition = [0, -0.075, 2];
+var lightPositionLoc;
+// Lighting properties - sekarang boolean untuk toggle
+var ambientEnabled = true;
+var diffuseEnabled = true; 
+var specularEnabled = true;
+var shininess = 15.0;
+var normalLoc;
+var viewPositionLoc;
+
+// Light stays white and neutral
+var lightAmbient   = vec4(1.0, 1.0, 1.0, 1.0);
+var lightDiffuse   = vec4(1.0, 1.0, 1.0, 1.0);
+var lightSpecular  = vec4(1.0, 1.0, 1.0, 1.0);
+
+// Material: warm brown diffuse, weak specular
+var materialAmbient   = vec4(0.25, 0.15, 0.1, 1.0);
+var materialDiffuse   = vec4(0.6, 0.3, 0.15, 1.0);
+var materialSpecular  = vec4(0.2, 0.2, 0.2, 1.0);
+
+// Uniform locations
+var ambientEnabledLoc, diffuseEnabledLoc, specularEnabledLoc, shininessLoc;
+
+var  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
+var  aspect;       // Viewport aspect ratio
+var modelViewMatrixLoc, projectionMatrixLoc;
+var modelViewMatrix, projectionMatrix;
+var eye;
+const at = vec3(0.0, 0.0, 0.0);
+const up = vec3(0.0, 1.0, 0.0);
 
 var vertices = [
     // kaki kiri depan
@@ -518,6 +556,9 @@ for (let i = 0; i < vertices.length; i++) {
     }
 }
 
+
+
+
 init();
 
 function init()
@@ -530,6 +571,8 @@ function init()
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
+
+    aspect =  canvas.width/canvas.height;
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -616,6 +659,21 @@ function init()
         theta = [0, 0, 0];
         position = [0, 0, 0];
         
+        // Reset toggle lighting
+ambientEnabled = true;
+diffuseEnabled = true;
+specularEnabled = true;
+shininess = 15.0;
+
+document.getElementById('ambientToggle').checked = true;
+document.getElementById('ambientStatus').textContent = 'ON';
+document.getElementById('diffuseToggle').checked = true;
+document.getElementById('diffuseStatus').textContent = 'ON';
+document.getElementById('specularToggle').checked = true;
+document.getElementById('specularStatus').textContent = 'ON';
+document.getElementById('shininess').value = 15;
+document.getElementById('shininessValue').textContent = '15';
+
         // Reset slider rotasi
         document.getElementById('rotateX').value = 0;
         document.getElementById('rotateXValue').textContent = '0°';
@@ -629,12 +687,60 @@ function init()
         document.getElementById('posXValue').textContent = '0.0';
         document.getElementById('posY').value = 0;
         document.getElementById('posYValue').textContent = '0.0';
-
+        
+                // Reset posisi cahaya
+        lightPosition = [0, -0.075, 2];
+        document.getElementById('lightX').value = 0;
+        document.getElementById('lightXValue').textContent = '0';
+        document.getElementById('lightY').value = -0.075;
+        document.getElementById('lightYValue').textContent = '-0.075';
+        document.getElementById('lightZ').value = 2;
+        document.getElementById('lightZValue').textContent = '2.0';
         
         autoRotate = true;
         autoRotateBtn.textContent = "Hentikan Rotasi";
     });
+
+    // Event listeners untuk toggle lighting
+document.getElementById('ambientToggle').addEventListener('change', function() {
+    ambientEnabled = this.checked;
+    document.getElementById('ambientStatus').textContent = ambientEnabled ? "ON" : "OFF";
+});
+
+document.getElementById('diffuseToggle').addEventListener('change', function() {
+    diffuseEnabled = this.checked;
+    document.getElementById('diffuseStatus').textContent = diffuseEnabled ? "ON" : "OFF";
+});
+
+document.getElementById('specularToggle').addEventListener('change', function() {
+    specularEnabled = this.checked;
+    document.getElementById('specularStatus').textContent = specularEnabled ? "ON" : "OFF";
+});
+
+document.getElementById('shininess').addEventListener('input', function() {
+    shininess = parseFloat(this.value);
+    document.getElementById('shininessValue').textContent = shininess;
+});
     
+        // Event listeners untuk kontrol posisi cahaya
+    document.getElementById('lightX').addEventListener('input', function() {
+        lightPosition[0] = parseFloat(this.value);
+        document.getElementById('lightXValue').textContent = lightPosition[0].toFixed(1);
+    });
+
+    document.getElementById('lightY').addEventListener('input', function() {
+        lightPosition[1] = parseFloat(this.value);
+        document.getElementById('lightYValue').textContent = lightPosition[1].toFixed(1);
+    });
+
+    document.getElementById('lightZ').addEventListener('input', function() {
+        lightPosition[2] = parseFloat(this.value);
+        document.getElementById('lightZValue').textContent = lightPosition[2].toFixed(1);
+    });
+
+
+
+
     // Tombol rotasi otomatis
     autoRotateBtn.addEventListener('click', function() {
         autoRotate = !autoRotate;
@@ -682,6 +788,22 @@ function init()
     //
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
+        // Dapatkan lokasi atribut dan uniform untuk lighting
+    var ambientProduct = mult(lightAmbient, materialAmbient);
+    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    var specularProduct = mult(lightSpecular, materialSpecular);
+
+
+    normalLoc = gl.getAttribLocation(program, "aNormal");
+    viewPositionLoc = gl.getUniformLocation(program, "uViewPosition");
+    
+    // Buat dan kirim data normal
+    var normals = calculateNormals(vertices, indices);
+    var normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(normalLoc);
 
     // array element buffer
 
@@ -707,19 +829,96 @@ function init()
     var positionAttrLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionAttrLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionAttrLoc);
-
+    
+   
     // Dapatkan lokasi uniform
     thetaLoc = gl.getUniformLocation(program, "uTheta");
     positionLoc = gl.getUniformLocation(program, "uPosition");
     // thetaColor = gl.getUniformLocation(program, "thetaColor");
     scaleLoc = gl.getUniformLocation(program, "uScale");
+    // Di fungsi init(), setelah membuat program
+ambientEnabledLoc = gl.getUniformLocation(program, "uAmbientEnabled");
+diffuseEnabledLoc = gl.getUniformLocation(program, "uDiffuseEnabled");
+specularEnabledLoc = gl.getUniformLocation(program, "uSpecularEnabled");
+shininessLoc = gl.getUniformLocation(program, "uShininess");
+
+    lightPositionLoc = gl.getUniformLocation(program, "uLightPosition");
     //event listeners for buttons
 
+    modelViewMatrixLoc = gl.getUniformLocation(program, "uModelViewMatrix");
+    projectionMatrixLoc = gl.getUniformLocation(program, "uProjectionMatrix");
 
+    gl.uniform4fv(gl.getUniformLocation(program,
+       "uAmbientProduct"),flatten(ambientProduct));
+    gl.uniform4fv(gl.getUniformLocation(program,
+       "uDiffuseProduct"),flatten(diffuseProduct));
+    gl.uniform4fv(gl.getUniformLocation(program,
+       "uSpecularProduct"),flatten(specularProduct));
+
+// buttons for viewing parameters
+
+    document.getElementById("Button1").onclick = function(){near  *= 1.1; far *= 1.1;};
+    document.getElementById("Button2").onclick = function(){near *= 0.9; far *= 0.9;};
+    document.getElementById("Button3").onclick = function(){radius *= 2.0;};
+    document.getElementById("Button4").onclick = function(){radius *= 0.5;};
+document.getElementById("Button5").onclick = function(){thetacam += dr;}; // PERBAIKAN: thetacam bukan theta
+document.getElementById("Button6").onclick = function(){thetacam -= dr;}; // PERBAIKAN: thetacam bukan theta
+    document.getElementById("Button7").onclick = function(){phi += dr;};
+    document.getElementById("Button8").onclick = function(){phi -= dr;};
 
     render();
 }
-
+// PERBAIKI fungsi calculateNormals:
+function calculateNormals(vertices, indices) {
+    // Inisialisasi array normal dengan ukuran yang benar
+    const normals = new Array(vertices.length * 3);
+    for (let i = 0; i < normals.length; i++) {
+        normals[i] = 0;
+    }
+    
+    for (let i = 0; i < indices.length; i += 3) {
+        const idx1 = indices[i];
+        const idx2 = indices[i + 1];
+        const idx3 = indices[i + 2];
+        
+        const v1 = vertices[idx1];
+        const v2 = vertices[idx2];
+        const v3 = vertices[idx3];
+        
+        const u = subtract(v2, v1);
+        const v = subtract(v3, v1);
+        const normal = normalize(cross(u, v));
+        
+        // Tambahkan normal ke setiap vertex
+        for (let j = 0; j < 3; j++) {
+            normals[idx1 * 3 + j] += normal[j];
+            normals[idx2 * 3 + j] += normal[j];
+            normals[idx3 * 3 + j] += normal[j];
+        }
+    }
+    
+    // Normalize semua normal
+    for (let i = 0; i < vertices.length; i++) {
+        const nx = normals[i * 3];
+        const ny = normals[i * 3 + 1];
+        const nz = normals[i * 3 + 2];
+        
+        const length = Math.sqrt(nx * nx + ny * ny + nz * nz);
+        
+        if (length > 0.0001) {
+            normals[i * 3] = nx / length;
+            normals[i * 3 + 1] = ny / length;
+            normals[i * 3 + 2] = nz / length;
+        } else {
+            // Default normal jika tidak valid
+            normals[i * 3] = 0.0;
+            normals[i * 3 + 1] = 1.0;
+            normals[i * 3 + 2] = 0.0;
+        }
+    }
+    
+    return normals;
+}
 function render()
 {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -729,12 +928,32 @@ function render()
         theta[1] += 0.7;
     }
     
+    // === INI DITARUH DI SINI - DI AWAL RENDER ===
+    
+    // Transformasi kamera
+    eye = vec3(radius*Math.sin(thetacam)*Math.cos(phi),
+        radius*Math.sin(thetacam)*Math.sin(phi), radius*Math.cos(thetacam));
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = perspective(fovy, aspect, near, far);
+
+    // Kirim uniform untuk lighting
+    gl.uniform3fv(viewPositionLoc, eye); // Posisi kamera untuk specular
+    gl.uniform3fv(lightPositionLoc, lightPosition);
+    
+    // Kirim uniform lainnya
     gl.uniform3fv(thetaLoc, theta);
     gl.uniform3fv(positionLoc, position);
     gl.uniform1f(scaleLoc, currentScale);
     
-    // // Gambar seluruh objek dengan warna kayu
-    // gl.uniform4fv(thetaColor, vec4(0.396, 0.267, 0.133, 1.0)); // Warna kayu
+    // Kirim toggle lighting
+    gl.uniform1i(ambientEnabledLoc, ambientEnabled);
+    gl.uniform1i(diffuseEnabledLoc, diffuseEnabled);
+    gl.uniform1i(specularEnabledLoc, specularEnabled);
+    gl.uniform1f(shininessLoc, shininess);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+    
     gl.drawElements(gl.TRIANGLES, numElements, gl.UNSIGNED_BYTE, 0);
     
     requestAnimationFrame(render);

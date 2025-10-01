@@ -231,6 +231,11 @@
         color: #7f8c8d;
         padding: 0 5px;
     }
+    input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
     
     @media (max-width: 900px) {
         .controls-container {
@@ -295,9 +300,85 @@
             Browser Anda tidak mendukung elemen canvas HTML5.
         </canvas>
     </div>
-    
+    <p> </p>
+
     <div class="controls-container">
+        <div class="control-group">
+            <h3>Kontrol Jenis Lighting</h3>
+        
+            <div class="control-row">
+                <span class="control-label">Ambient:</span>
+                <div class="slider-container">
+                    <input type="checkbox" id="ambientToggle" checked>
+                </div>
+                <span class="value-display" id="ambientStatus">ON</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Diffuse:</span>
+                <div class="slider-container">
+                    <input type="checkbox" id="diffuseToggle" checked>
+                </div>
+                <span class="value-display" id="diffuseStatus">ON</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Specular:</span>
+                <div class="slider-container">
+                    <input type="checkbox" id="specularToggle" checked>
+                </div>
+                <span class="value-display" id="specularStatus">ON</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Shininess:</span>
+                <div class="slider-container">
+                    <input type="range" id="shininess" min="1" max="128" value="15">
+                </div>
+                <span class="value-display" id="shininessValue">15</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <h3>Kontrol Posisi Cahaya</h3>
+            <div class="control-row">
+                <span class="control-label">Cahaya X:</span>
+                <div class="slider-container">
+                    <input type="range" id="lightX" min="-10" max="10" value="0.0" step="0.1">
+                </div>
+                <span class="value-display" id="lightXValue">0.0</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Cahaya Y:</span>
+                <div class="slider-container">
+                    <input type="range" id="lightY" min="-10" max="10" value="-0.075" step="0.1">
+                </div>
+                <span class="value-display" id="lightYValue">-0.075</span>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label">Cahaya Z:</span>
+                <div class="slider-container">
+                    <input type="range" id="lightZ" min="-10" max="10" value="2.0" step="0.1">
+                </div>
+                <span class="value-display" id="lightZValue">2.0</span>
+            </div>
+        </div>
         <!-- Kontrol Rotasi -->
+        <div class="control-group">
+            <h3>Kontrol Kamera</h3>
+            <button id = "Button1">Increase Z</button>
+            <button id = "Button2">Decrease Z</button>
+            <button id = "Button3">Increase R</button>
+            <button id = "Button4">Decrease R</button>
+
+            <p> </p>
+            <button id = "Button5">Increase theta</button>
+            <button id = "Button6">Decrease theta</button>
+            <button id = "Button7">Increase phi</button>
+            <button id = "Button8">Decrease phi</button>
+            <p> </p>
+        </div>
         <div class="control-group">
             <h3>Kontrol Rotasi</h3>
             
@@ -325,6 +406,7 @@
                 <span class="value-display" id="rotateZValue">0°</span>
             </div>
         </div>
+        
         
         <!-- Kontrol Posisi -->
         <div class="control-group">
@@ -377,130 +459,133 @@
             Dobel klik canvas untuk rotasi otomatis
         </div>
     </div>
-    <!-- <button id="ChangeColor">Change Object to Green
-    </button>
-    <button id="ChangeColorRed">Change Object to Red
-    </button> -->
-    <!-- <div style="display: grid; justify-content: flex-start; gap: 5px; grid-template-columns: repeat(2, auto);">
-        <button id="rotate-left">Rotate Left
-        </button>
-        <button id="rotate-right">Rotate Right
-        </button>
-        <button id="rotate-up">Rotate Up
-        </button>
-        <button id="rotate-down">Rotate Down
-        </button>
-        <button id="rotate-left">Move to Left
-        </button>
-        <button id="rotate-right">Move to Right
-        </button>
-        <button id="clear" style="background-color: red;">Clear Effects
-        </button>
-    </div> -->
-<!-- <select id="mymenu" size="7">
-    <option value="0">Point</option>
-    <option value="1">Line</option>
-    <option value="2">Line Loop</option>
-    <option value="3">Line Strip</option>
-    <option value="4">Triangle</option>
-    <option value="5">Triangle Strip</option>
-    <option value="6">Triangle Fan</option>
-</select> -->
-
-<!-- <div>
-    Size (default: 1) 0.5x<input id="size_slide" type="range"
-       min="0.5" max="1.5" step="0.1" value="1" />
-    1.5x 
-</div>
-<div>
-    Red level 0 <input id="red_slide" type="range"
-       min="0" max="1.0" step="0.1" value="0" />
-    1.0 
-</div>
-<div>
-    Green level 0 <input id="green_slide" type="range"
-       min="0" max="1.0" step="0.1" value="0" />
-    1.0 
-</div>
-<div>
-    Blue level 0 <input id="blue_slide" type="range"
-       min="0" max="1.0" step="0.1" value="0" />
-    1.0 
-</div>
-<div>
-    Alpha level 0 <input id="alpha_slide" type="range"
-       min="0" max="1.0" step="0.1" value="1" />
-    1.0 
-</div>
-     -->
-
 <script id="vertex-shader" type="x-shader/x-vertex">
 #version 300 es
 
-in  vec4 aPosition;
+in vec4 aPosition;
 in vec4 aColor;
+in vec3 aNormal;
+
 out vec4 vColor;
+out vec3 vPosition;
+out vec3 vNormal;
 
 uniform vec3 uTheta;
 uniform float uScale;
 uniform vec3 uPosition;
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
 
 void main()
 {
-    // Compute the sines and cosines of theta for each of
-    //   the three axes in one computation.
-    vec3 angles = radians( uTheta );
-    vec3 c = cos( angles );
-    vec3 s = sin( angles );
+    // Transformasi rotasi dan scaling
+    vec3 angles = radians(uTheta);
+    vec3 c = cos(angles);
+    vec3 s = sin(angles);
 
-    // Remeber: thse matrices are column-major
-    mat4 rx = mat4( 1.0,  0.0,  0.0, 0.0,
-		    0.0,  c.x,  s.x, 0.0,
-		    0.0, -s.x,  c.x, 0.0,
-		    0.0,  0.0,  0.0, 1.0 );
+    mat4 rx = mat4(1.0,  0.0,  0.0, 0.0,
+                   0.0,  c.x,  s.x, 0.0,
+                   0.0, -s.x,  c.x, 0.0,
+                   0.0,  0.0,  0.0, 1.0);
 
-    mat4 ry = mat4( c.y, 0.0, -s.y, 0.0,
-		    0.0, 1.0,  0.0, 0.0,
-		    s.y, 0.0,  c.y, 0.0,
-		    0.0, 0.0,  0.0, 1.0 );
+    mat4 ry = mat4(c.y, 0.0, -s.y, 0.0,
+                   0.0, 1.0,  0.0, 0.0,
+                   s.y, 0.0,  c.y, 0.0,
+                   0.0, 0.0,  0.0, 1.0);
     
-    mat4 rz = mat4( c.z,  s.z, 0.0, 0.0,
-		   -s.z,  c.z, 0.0, 0.0,
-		    0.0,  0.0, 1.0, 0.0,
-		    0.0,  0.0, 0.0, 1.0 );
+    mat4 rz = mat4(c.z,  s.z, 0.0, 0.0,
+                  -s.z,  c.z, 0.0, 0.0,
+                   0.0,  0.0, 1.0, 0.0,
+                   0.0,  0.0, 0.0, 1.0);
 
-    mat4 scale = mat4( uScale, 0.0,    0.0,    0.0,
-                       0.0,    uScale, 0.0,    0.0,
-                       0.0,    0.0,    uScale, 0.0,
-                       0.0,    0.0,    0.0,    1.0 );
+    mat4 scale = mat4(uScale, 0.0,    0.0,    0.0,
+                      0.0,    uScale, 0.0,    0.0,
+                      0.0,    0.0,    uScale, 0.0,
+                      0.0,    0.0,    0.0,    1.0);
 
-    mat4 translation = mat4( 1.0, 0.0, 0.0, 0.0,
-                             0.0, 1.0, 0.0, 0.0,
-                             0.0, 0.0, 1.0, 0.0,
-                             uPosition.x, uPosition.y, uPosition.z, 1.0 );
+    mat4 translation = mat4(1.0, 0.0, 0.0, 0.0,
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            uPosition.x, uPosition.y, uPosition.z, 1.0);
 
+    // Transformasi model (tanpa view matrix)
+    mat4 modelMatrix = translation * rz * ry * rx * scale;
+    
+    // Transformasi posisi
+    vec4 worldPosition = modelMatrix * aPosition;
+    
+    // Transformasi normal - PERBAIKAN: gunakan mat3 dari modelMatrix
+    mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
+    vNormal = normalize(normalMatrix * aNormal);
+    
     vColor = aColor;
+    vPosition = worldPosition.xyz;
     
-    // Gunakan semua matriks rotasi dan tambahkan translasi
-    gl_Position = translation * rz * ry * rx * scale * aPosition;
-    gl_Position.z = -gl_Position.z;  // Untuk sistem koordinat tangan kanan
+    gl_Position = uProjectionMatrix * uModelViewMatrix * modelMatrix * aPosition;
 }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
-    #version 300 es
-    precision mediump float;
+#version 300 es
+precision mediump float;
+
+in vec4 vColor;
+in vec3 vPosition;
+in vec3 vNormal;
+
+out vec4 fColor;
+
+uniform vec3 uLightPosition;
+uniform bool uAmbientEnabled;
+uniform bool uDiffuseEnabled;
+uniform bool uSpecularEnabled;
+uniform vec4 uAmbientProduct;
+uniform vec4 uDiffuseProduct;
+uniform vec4 uSpecularProduct;
+uniform float uShininess;
+uniform vec3 uViewPosition;
+
+void main()
+{
+    vec3 objectColor = vColor.rgb;
     
-    in vec4 vColor;
-    out vec4 fColor;
+    // Normal yang sudah di-interpolasi
+    vec3 normal = normalize(vNormal);
     
-    void
-    main()
-    {
-        fColor = vColor;
+    // Vektor arah cahaya dan view
+    vec3 lightDir = normalize(uLightPosition - vPosition);
+    vec3 viewDir = normalize(uViewPosition - vPosition);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    
+    // Ambient
+    vec3 ambient = vec3(0.0);
+    if (uAmbientEnabled) {
+        ambient = uAmbientProduct.rgb;
     }
-    </script>
     
+    // Diffuse 
+    vec3 diffuse = vec3(0.0);
+    if (uDiffuseEnabled) {
+        float diff = max(dot(normal, lightDir), 0.0);
+        diffuse = diff * uDiffuseProduct.rgb;
+    }
+    
+    // Specular
+    vec3 specular = vec3(0.0);
+    if (uSpecularEnabled) {
+        // PERBAIKAN: gunakan half vector untuk hasil yang lebih baik
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), uShininess);
+        specular = spec * uSpecularProduct.rgb;
+    }
+    
+    // Kombinasi final - PERBAIKAN: tambahkan ambient ke result terpisah
+    vec3 lighting = ambient + diffuse + specular;
+    vec3 result = lighting * objectColor;
+    
+    fColor = vec4(result, 1.0);
+}
+</script>
 
 
 <script src="initShaders.js"></script>
